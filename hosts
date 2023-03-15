@@ -1,0 +1,15 @@
+testinstance1 ansible_host=158.160.62.234
+testinstance2 ansible_host=158.160.49.159
+testinstance3 ansible_host=158.160.41.154
+testinstance4 ansible_host=158.160.34.7
+testinstance5 ansible_host=158.160.61.197
+
+[testinstances]
+testinstance1
+testinstance2
+testinstance3
+#testinstance4
+testinstance5
+
+[webservers:children]
+testinstances

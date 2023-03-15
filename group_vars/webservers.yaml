@@ -1,0 +1,8 @@
+nginx_image_name: nginx
+nginx_image_tag: 1.23.2-alpine
+nginx_image: "{{ nginx_image_name }}:{{ nginx_image_tag }}"
+
+nginx_dir: "{{ ansible_facts.user_dir }}"
+
+nginx_conf: "{{ nginx_dir }}/nginx.conf"
+html_file: "{{ nginx_dir }}/index.html"

@@ -1,0 +1,39 @@
+---
+- name: Update web servers
+  hosts: webservers
+
+
+  tasks:
+  - name: Print hostname
+    ansible.builtin.debug:
+      msg: "Instance hostname is {{ ansible_facts.hostname }}"
+
+  - name: Install docker
+    ansible.builtin.apt:
+      name: docker.io
+      update_cache: yes
+      state: present
+    become: true
+
+  - name: Copy nginx config
+    ansible.builtin.copy:
+      src: files/nginx.conf
+      dest: "{{ nginx_conf }}"
+      mode: u=rw,g=r,o=r
+
+  - name: Template index.html
+    ansible.builtin.template:
+      src: templates/index.html.j2
+      dest: "{{ html_file }}"
+      mode: u=rw,g=r,o=r
+
+  - name: Run nginx
+    community.docker.docker_container:
+      name: nginx
+      image: "{{ nginx_image }}"
+      volumes:
+        - "{{ html_file }}:/usr/share/nginx/html/index.html"
+        - "{{ nginx_conf }}:/etc/nginx/conf.d/default.conf"
+      ports:
+        - 80:80
+    become: true
